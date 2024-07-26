@@ -7,7 +7,7 @@ services:
       context: .
     platform: linux/amd64
     environment:
-      REPO: ikondrat/github-runners 
+      REPO: 
       TOKEN: 
       RUNNER_WORKDIR: '/home/docker/_work'
       RUNNER_LABELS: kondrat
