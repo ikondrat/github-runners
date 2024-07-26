@@ -15,6 +15,10 @@ get_registration_token() {
     fi
 }
 
+# API token is valid nly one hour
+# https://docs.github.com/en/rest/actions/self-hosted-runners?apiVersion=2022-11-28#create-a-registration-token-for-an-organization
+TOKEN_EXPIRATION_TIME=3600  # 1 hour
+
 # Get the initial registration token
 get_registration_token
 
@@ -38,10 +42,10 @@ cleanup() {
 trap 'cleanup; exit 130' INT
 trap 'cleanup; exit 143' TERM
 
-# Function to renew the token if it has expired
+# Function to renew the expired token
 renew_token_if_needed() {
     while true; do
-        sleep 3600  # Check every hour; adjust as needed
+        sleep $TOKEN_EXPIRATION_TIME  # Check every hour; adjust as needed
         echo "Renewing token..."
         get_registration_token
         ./config.sh --url https://github.com/${REPO} \
