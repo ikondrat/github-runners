@@ -1,5 +1,8 @@
-FROM ubuntu:20.04
+ARG OS="ubuntu:20.04"
 
+FROM $OS
+ARG ARCH=x64
+ARG PLATFORM=linux
 ARG RUNNER_VERSION="2.317.0"
 
 # Prevents installdependencies.sh from prompting the user and blocking the image creation
@@ -18,8 +21,8 @@ WORKDIR /home/docker
 # Download the GitHub runner
 RUN mkdir actions-runner \
     && cd actions-runner \
-    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
-    && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-${PLATFORM}-${ARCH}-${RUNNER_VERSION}.tar.gz \
+    && tar xzf ./actions-runner-${PLATFORM}-${ARCH}-${RUNNER_VERSION}.tar.gz
 
 WORKDIR /home/docker/actions-runner
 

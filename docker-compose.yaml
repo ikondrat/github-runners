@@ -1,6 +1,5 @@
 services:
-  github-runner-linux-x64:
-    image: github-runner:latest
+  ubuntu-20.04:
     stdin_open: true
     tty: true
     build:
@@ -9,9 +8,29 @@ services:
     environment:
       REPO: 
       TOKEN:
-      RUNNER_NAME: 'linux-x64'
-      RUNNER_WORKDIR: '/home/docker/_work'
-      RUNNER_LABELS: kondrat,ubuntu,20.04,x64
+      RUNNER_LABELS: "ubuntu,20.04"
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+  debian-bookworm:
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      args:
+        - OS=debian:bookworm
+    platform: linux/amd64
+    environment:
+      REPO: 
+      TOKEN:
+      RUNNER_LABELS: "debian,bookworm"
     deploy:
       mode: replicated
       replicas: 2
