@@ -3,6 +3,7 @@
 # GitHub token and URL
 REPO=${REPO}
 ACCESS_TOKEN=${TOKEN}
+RUNNER_NAME=${RUNNER_NAME:-"custom-runner"}
 RUNNER_LABELS=${RUNNER_LABELS}
 RUNNER_WORKDIR=${RUNNER_WORKDIR:-_work}
 
@@ -27,7 +28,7 @@ cd /home/docker/actions-runner
 # Configure the runner
 ./config.sh --url https://github.com/${REPO} \
     --token ${REG_TOKEN} \
-    --name $(hostname) \
+    --name "$RUNNER_NAME-$(hostname)" \
     --labels $RUNNER_LABELS \
     --work $RUNNER_WORKDIR \
     --unattended \
@@ -50,7 +51,7 @@ renew_token_if_needed() {
         get_registration_token
         ./config.sh --url https://github.com/${REPO} \
             --token ${REG_TOKEN} \
-            --name $(hostname) \
+            --name "$RUNNER_NAME-$(hostname)" \
             --labels $RUNNER_LABELS \
             --work $RUNNER_WORKDIR \
             --unattended \

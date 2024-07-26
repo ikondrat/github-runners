@@ -1,5 +1,5 @@
 services:
-  github-runner-linux:
+  github-runner-linux-x64:
     image: github-runner:latest
     stdin_open: true
     tty: true
@@ -8,9 +8,10 @@ services:
     platform: linux/amd64
     environment:
       REPO: 
-      TOKEN: 
+      TOKEN:
+      RUNNER_NAME: 'linux-x64'
       RUNNER_WORKDIR: '/home/docker/_work'
-      RUNNER_LABELS: kondrat
+      RUNNER_LABELS: kondrat,ubuntu,20.04,x64
     deploy:
       mode: replicated
       replicas: 2
