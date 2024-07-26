@@ -1,0 +1,37 @@
+FROM ubuntu:20.04
+
+ARG RUNNER_VERSION="2.317.0"
+
+# Prevents installdependencies.sh from prompting the user and blocking the image creation
+ARG DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies
+RUN apt update -y && apt upgrade -y
+RUN apt install -y --no-install-recommends \
+    curl jq build-essential libssl-dev libffi-dev python3 python3-venv python3-dev python3-pip
+
+# Add a non-root user
+RUN useradd -m docker
+
+WORKDIR /home/docker
+
+# Download the GitHub runner
+RUN mkdir actions-runner \
+    && cd actions-runner \
+    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
+    && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+
+WORKDIR /home/docker/actions-runner
+
+# # Install the runner
+RUN ./bin/installdependencies.sh
+
+
+# Copy entrypoint script
+COPY ./entrypoint.sh /home/docker/actions-runner/entrypoint.sh
+
+RUN chown -R docker /home/docker/actions-runner
+
+USER docker
+
+ENTRYPOINT ["/home/docker/actions-runner/entrypoint.sh"]

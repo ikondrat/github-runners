@@ -1,0 +1,23 @@
+services:
+  github-runner-linux:
+    image: github-runner:latest
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+    platform: linux/amd64
+    environment:
+      REPO: ikondrat/github-runners 
+      TOKEN: 
+      RUNNER_WORKDIR: '/home/docker/_work'
+      RUNNER_LABELS: kondrat
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
