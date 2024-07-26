@@ -2,8 +2,11 @@ services:
   ubuntu-20.04:
     stdin_open: true
     tty: true
+    volumes:
+      - pip_cache:/root/.cache/pip
     build:
       context: .
+      dockerfile: dockerfile.linux
     platform: linux/amd64
     environment:
       REPO: 
@@ -24,6 +27,7 @@ services:
     tty: true
     build:
       context: .
+      dockerfile: dockerfile.linux
       args:
         - OS=debian:bookworm
     platform: linux/amd64
@@ -41,3 +45,28 @@ services:
         reservations:
           cpus: '0.25'
           memory: 256M
+  # ubuntu-20.04-gpu:
+  #   stdin_open: true
+  #   tty: true
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile.linux-gpu
+  #   platform: linux/amd64
+  #   environment:
+  #     REPO: 
+  #     TOKEN:
+  #     RUNNER_LABELS: "ubuntu,20.04,gpu"
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 2
+  #     resources:
+  #       limits:
+  #         cpus: '0.5'
+  #         memory: 512M
+  #       reservations:
+  #         cpus: '0.25'
+  #         memory: 256M
+  #         devices:
+  #           - capabilities: [gpu]
+volumes:
+  pip_cache:
